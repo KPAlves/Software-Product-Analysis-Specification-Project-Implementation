@@ -26,7 +26,7 @@ class UserModel {
     };
   }
 
-  // Construtor para criar um objeto User a partir de um mapa.
+  // Construtor para criar um objeto User a partir de um map.
   UserModel.fromMap(Map<String, dynamic> map)
       : id = map['id'],
         name = map['name'],

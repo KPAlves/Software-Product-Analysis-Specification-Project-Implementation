@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:personal_trainer/data/database_helper.dart';
 import 'package:personal_trainer/data/user_dao.dart';
 import 'package:personal_trainer/data/user_model.dart';
 
@@ -24,54 +25,17 @@ class TextFormFieldDemo extends StatefulWidget {
   TextFormFieldDemoState createState() => TextFormFieldDemoState();
 }
 
-class DadosPessoais {
-  String nome = '';
-  String dataNascimento = '';
-  String genero = '';
-  String telefone = '';
-  String email = '';
-  String senha = '';
-}
-
 class TextFormFieldDemoState extends State<TextFormFieldDemo> {
-
-  DadosPessoais dadosPessoais = DadosPessoais();
+  
+  TextEditingController name = TextEditingController();
+  TextEditingController birthDate = TextEditingController();
+  TextEditingController gender = TextEditingController();
+  TextEditingController phone = TextEditingController();
+  TextEditingController email = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  void _btnSalvar() async {
-    final form = _formKey.currentState!;
-    
-    if (form.validate()) {
-
-      form.save();
-
-      // Crie uma instância de User com os dados do formulário.
-      final user = UserModel(
-        name: dadosPessoais.nome,
-        birthDate: DateTime.tryParse(dadosPessoais.dataNascimento) ?? DateTime.now(),
-        gender: dadosPessoais.genero,
-        phone: dadosPessoais.telefone,
-        email: dadosPessoais.email,
-      );
-      
-      try {
-
-        final userDao = UserDao();
-        userDao.insertUser(user);  
-        showInSnackBar('Usuário salvo com sucesso');
-      } catch (e) {
-        showInSnackBar('Erro ao salvar o usuário');      
-      }
-    }
-  }
-
-  void showInSnackBar(String value) {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(value),
-    ));
-  }
+  
+  UserModel user = UserModel(name: '', birthDate: DateTime.now(), gender: '', phone: '', email: '');
 
   @override
   Widget build(BuildContext context) {
@@ -86,6 +50,7 @@ class TextFormFieldDemoState extends State<TextFormFieldDemo> {
             children: [
               sizedBoxSpace,
               TextFormField(
+                controller: name,
                 textInputAction: TextInputAction.next,
                 textCapitalization: TextCapitalization.words,
                 decoration: const InputDecoration(
@@ -95,11 +60,12 @@ class TextFormFieldDemoState extends State<TextFormFieldDemo> {
                   labelText: 'Nome completo'
                 ),
                 onSaved: (value) {
-                  dadosPessoais.nome = value.toString();
+                  user.name = value.toString();
                 },                
               ),
               sizedBoxSpace,
               TextFormField(
+                controller: birthDate,
                 textInputAction: TextInputAction.next,
                 decoration: const InputDecoration(
                   filled: true,
@@ -109,11 +75,12 @@ class TextFormFieldDemoState extends State<TextFormFieldDemo> {
                 ),
                 keyboardType: TextInputType.datetime,
                 onSaved: (value) {
-                  dadosPessoais.dataNascimento = value.toString();
+                  user.birthDate = DateTime.tryParse(value!) ?? DateTime.now();
                 },
               ),
               sizedBoxSpace,
               TextFormField(
+                controller: gender,
                 textInputAction: TextInputAction.next,
                 textCapitalization: TextCapitalization.words,
                 decoration: const InputDecoration(
@@ -123,11 +90,12 @@ class TextFormFieldDemoState extends State<TextFormFieldDemo> {
                   labelText: 'Gênero'
                 ),
                 onSaved: (value) {
-                  dadosPessoais.genero = value.toString();
+                  user.gender = value.toString();
                 },                
               ),
               sizedBoxSpace,
               TextFormField(
+                controller: phone,
                 textInputAction: TextInputAction.next,
                 decoration: const InputDecoration(
                   filled: true,
@@ -137,7 +105,7 @@ class TextFormFieldDemoState extends State<TextFormFieldDemo> {
                 ),
                 keyboardType: TextInputType.phone,
                 onSaved: (value) {
-                  dadosPessoais.telefone = value.toString();
+                  user.phone = value.toString();
                 },
                 maxLength: 9,
                 maxLengthEnforcement: MaxLengthEnforcement.none,
@@ -147,6 +115,7 @@ class TextFormFieldDemoState extends State<TextFormFieldDemo> {
               ),
               sizedBoxSpace,
               TextFormField(
+                controller: email,
                 textInputAction: TextInputAction.next,
                 decoration: const InputDecoration(
                   filled: true,
@@ -156,7 +125,7 @@ class TextFormFieldDemoState extends State<TextFormFieldDemo> {
                 ),
                 keyboardType: TextInputType.emailAddress,
                 onSaved: (value) {
-                  dadosPessoais.email = value.toString();
+                  user.email = value.toString();
                 },
               ),
               sizedBoxSpace,
@@ -174,4 +143,41 @@ class TextFormFieldDemoState extends State<TextFormFieldDemo> {
       ),
     );
   }
+
+  void _btnSalvar() async {
+    final form = _formKey.currentState!;
+    
+    if (form.validate()) {
+      form.save();
+      try {
+        final userDao = UserDao();
+        userDao.insertUser(user);
+        //Select na tabela Users exibindo on console
+        DatabaseHelper.instance.selectTabelaUsers();
+        showInSnackBar('Usuário salvo com sucesso');
+        _limparCampos();
+      } catch (e) {
+        showInSnackBar('Erro ao salvar o usuário');      
+      }
+    }
+  }
+
+  void showInSnackBar(String value) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(value),
+    ));
+  }
+
+  void _limparCampos() {
+  setState(() {
+    name.clear();
+    birthDate.clear();
+    gender.clear();
+    phone.clear();
+    email.clear();
+  });
 }
+}
+
+

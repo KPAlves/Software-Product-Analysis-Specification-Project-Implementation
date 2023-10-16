@@ -43,4 +43,13 @@ class DatabaseHelper {
     _database = await initializeDatabase();
     return _database;
   }
+
+  Future<void> selectTabelaUsers() async { 
+    
+    final db = await initializeDatabase();
+    List<Map> list = await db.rawQuery('SELECT * FROM users');
+    for (var element in list) {
+      print(element);
+    }
+  }
 }
