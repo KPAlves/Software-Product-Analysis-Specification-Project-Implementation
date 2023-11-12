@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:personal_trainer/data/database_helper.dart';
 import 'package:personal_trainer/screens/add_exercise_screen.dart';
-import 'package:personal_trainer/screens/home_screen.dart';
 
 
 Future<void> main() async {

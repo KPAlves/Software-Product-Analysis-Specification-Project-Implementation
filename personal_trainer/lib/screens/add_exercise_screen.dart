@@ -5,8 +5,6 @@ import 'package:personal_trainer/data/database_helper.dart';
 import 'package:personal_trainer/data/exercise_dao.dart';
 import 'package:personal_trainer/data/exercise_model.dart';
 
-
-
 List<String> _list = <String>['abdominal', 'esteira', 'flexao', 'isometria', 'supino_inclinado', 'supino_reto', 'supino_reto_maquina', 'triceps_banco_sentado', 'triceps_banco', 'triceps_martelo_deitado', 'triceps_mergulho', 'triceps_polia'];
 
 
@@ -33,7 +31,7 @@ class _AddExerciseScreenState extends State<AddExerciseScreen> {
   @override
   void initState() {
     super.initState();
-    // Inicializa o Stream com a lista de usuários do banco de dados.
+    // Inicializa o Stream com a lista de exercicios do banco de dados.
     exerciseDao.getExercises().then((exercises) {
       exerciseStreamController.sink.add(exercises);
     });
@@ -45,11 +43,87 @@ class _AddExerciseScreenState extends State<AddExerciseScreen> {
     super.dispose();
   }
 
-  String? _validateField(String? value) {
-    if (value == null || value.isEmpty) {
-      return "Campo obrigatório";
-    }
-    return null;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Exercícios'),
+            // Text(
+                //   'Subtitulo App Bar',
+                //   style: Theme.of(context)
+                //       .textTheme
+                //       .titleSmall!
+                //       .copyWith(color: Colors.white),
+                // ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: openDialogBox,
+        child: const Icon(Icons.add),
+      ),
+      body: StreamBuilder<List<ExerciseModel>>(
+        stream: exerciseStreamController.stream,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final exercises = snapshot.data;
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 8),
+                const Padding(
+                  padding: EdgeInsetsDirectional.only(start: 8.0),
+                  child: Text('Lista de Exercícios'),    
+                ),
+                const SizedBox(height: 4),
+                Expanded(
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(8),
+                    itemCount: exercises?.length,
+                    itemBuilder: (context, index) {
+                      final exercise = exercises?[index];
+                      return Row(
+                        children: [
+                          SizedBox(
+                            height: 70,
+                            width: 100,
+                            child: ClipRRect(
+                              borderRadius: const BorderRadius.all(Radius.circular(4)),
+                              child: Image.asset(
+                                exercise!.image,
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 24,),
+                          Expanded(
+                            child: Column(
+                              children: [
+                                ListTile(
+                                  title: Text(exercise.name),
+                                  subtitle: Text(exercise.description),
+                                  trailing: Text('0${index + 1}'),
+                                ),
+                                const Divider(thickness: 2),
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ],
+            );           
+          } else {
+            return const Text("Nenuhm exercício...");
+          }
+        },
+      ),
+    );
   }
 
   String dropdownValue = "";
@@ -142,6 +216,13 @@ class _AddExerciseScreenState extends State<AddExerciseScreen> {
     );
   }
 
+  String? _validateField(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Campo obrigatório";
+    }
+    return null;
+  }  
+
   void _atualizarListaExercicios() {
     exerciseDao.getExercises().then((exercises) {
       exerciseStreamController.sink.add(exercises);
@@ -164,7 +245,7 @@ class _AddExerciseScreenState extends State<AddExerciseScreen> {
       try {
         final exerciseDao = ExerciseDao();
         exerciseDao.insertExercise(exercise);
-        //Select na tabela Users exibindo on console
+        //Select na tabela Exercises exibindo on console
         DatabaseHelper.instance.selectTabelaExercises();
         showInSnackBar('Exercício salvo com sucesso');
         _limparCampos();
@@ -181,86 +262,5 @@ class _AddExerciseScreenState extends State<AddExerciseScreen> {
     ));
   }
   
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Exercícios'),
-            // Text(
-                //   'Subtitulo App Bar',
-                //   style: Theme.of(context)
-                //       .textTheme
-                //       .titleSmall!
-                //       .copyWith(color: Colors.white),
-                // ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: openDialogBox,
-        child: const Icon(Icons.add),
-      ),
-      body: StreamBuilder<List<ExerciseModel>>(
-        stream: exerciseStreamController.stream,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            final exercises = snapshot.data;
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 8),
-                const Padding(
-                  padding: EdgeInsetsDirectional.only(start: 8.0),
-                  child: Text('Lista de Exercícios'),    
-                ),
-                const SizedBox(height: 4),
-                Expanded(
-                  child: ListView.builder(
-                    padding: const EdgeInsets.all(8),
-                    itemCount: exercises?.length,
-                    itemBuilder: (context, index) {
-                      final exercise = exercises?[index];
-                      return Row(
-                        children: [
-                          SizedBox(
-                            height: 70,
-                            width: 100,
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.all(Radius.circular(4)),
-                              child: Image.asset(
-                                exercise!.image,
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 24,),
-                          Expanded(
-                            child: Column(
-                              children: [
-                                ListTile(
-                                  title: Text(exercise.name),
-                                  subtitle: Text(exercise.description),
-                                  trailing: Text('0${index + 1}'),
-                                ),
-                                const Divider(thickness: 2),
-                              ],
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                ),
-              ],
-            );           
-          } else {
-            return const Text("Nenuhm exercício...");
-          }
-        },
-      ),
-    );
-  }
+  
 }

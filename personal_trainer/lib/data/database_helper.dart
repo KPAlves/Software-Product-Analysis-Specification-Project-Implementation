@@ -26,16 +26,6 @@ class DatabaseHelper {
 
   // Método chamado durante a criação do banco de dados para criar a tabela de usuários e tabela de exercícios.
   Future<void> _onCreate(Database db, int version) async {
-    await db.execute('''
-      CREATE TABLE $usersTable (
-        id INTEGER PRIMARY KEY,
-        name TEXT,
-        birthDate TEXT,
-        gender TEXT,
-        phone TEXT,
-        email TEXT
-      )
-    ''');
 
     await db.execute('''
       CREATE TABLE $exercisesTable (
