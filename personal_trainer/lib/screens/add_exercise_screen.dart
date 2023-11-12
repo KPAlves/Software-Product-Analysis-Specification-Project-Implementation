@@ -7,7 +7,8 @@ import 'package:personal_trainer/data/exercise_model.dart';
 
 
 
-        List<String> _list = <String>['abdominal', 'Two', 'Three', 'Four'];
+List<String> _list = <String>['abdominal', 'esteira', 'flexao', 'isometria', 'supino_inclinado', 'supino_reto', 'supino_reto_maquina', 'triceps_banco_sentado', 'triceps_banco', 'triceps_martelo_deitado', 'triceps_mergulho', 'triceps_polia'];
+
 
 class AddExerciseScreen extends StatefulWidget {
   const AddExerciseScreen({super.key});
@@ -44,7 +45,6 @@ class _AddExerciseScreenState extends State<AddExerciseScreen> {
     super.dispose();
   }
 
-
   String? _validateField(String? value) {
     if (value == null || value.isEmpty) {
       return "Campo obrigatório";
@@ -52,8 +52,7 @@ class _AddExerciseScreenState extends State<AddExerciseScreen> {
     return null;
   }
 
-
-    String dropdownValue = _list.first;
+  String dropdownValue = "";
 
   void openDialogBox() {
     const sizedBoxSpace = SizedBox(height: 24);
@@ -117,38 +116,7 @@ class _AddExerciseScreenState extends State<AddExerciseScreen> {
                     dropdownMenuEntries: _list.map<DropdownMenuEntry<String>>((String value) {
                       return DropdownMenuEntry<String>(value: value, label: value);
                     }).toList(), 
-
-
-            
-
-
-                  ),
-
-                  // sizedBoxSpace,
-                  // TextFormField(
-                  //   controller: image,
-                  //   textInputAction: TextInputAction.next,
-                  //   decoration: const InputDecoration(
-                  //     filled: true,
-                  //     icon: Icon(Icons.image),
-                  //     hintText: 'Imagem do exercício',
-                  //     labelText: 'Imagem*'
-                  //   ),
-                  //   onSaved: (value) {
-                  //     exercise.image = 'assets/images/$value.png';
-                  //   },
-                  //   validator: _validateField,                 
-                  // ),
-                
-                
-                             
-                
-                
-                
-                
-                
-                
-                
+                  ),              
                 ],
               ),
             ),
@@ -173,7 +141,6 @@ class _AddExerciseScreenState extends State<AddExerciseScreen> {
       ),
     );
   }
-
 
   void _atualizarListaExercicios() {
     exerciseDao.getExercises().then((exercises) {

@@ -4,6 +4,7 @@ import 'package:path/path.dart';
 class DatabaseHelper {
   static const String databaseName = 'personal_trainer.db'; // Nome do banco de dados
   static const String usersTable = 'users'; // Nome da tabela de usuários
+  static const String exercisesTable = 'exercises'; // Nome da tabela de exercícios
 
   DatabaseHelper._privateConstructor();
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
@@ -23,7 +24,7 @@ class DatabaseHelper {
     return _database;
   }
 
-  // Método chamado durante a criação do banco de dados para criar a tabela de usuários.
+  // Método chamado durante a criação do banco de dados para criar a tabela de usuários e tabela de exercícios.
   Future<void> _onCreate(Database db, int version) async {
     await db.execute('''
       CREATE TABLE $usersTable (
@@ -35,6 +36,15 @@ class DatabaseHelper {
         email TEXT
       )
     ''');
+
+    await db.execute('''
+      CREATE TABLE $exercisesTable (
+        id INTEGER PRIMARY KEY,
+        name TEXT,
+        description TEXT,
+        image TEXT
+      )
+    ''');    
   }
 
   // Obtém a instância do banco de dados.
@@ -48,6 +58,15 @@ class DatabaseHelper {
     
     final db = await initializeDatabase();
     List<Map> list = await db.rawQuery('SELECT * FROM users');
+    for (var element in list) {
+      print(element);
+    }
+  }
+
+    Future<void> selectTabelaExercises() async { 
+    
+    final db = await initializeDatabase();
+    List<Map> list = await db.rawQuery('SELECT * FROM exercises');
     for (var element in list) {
       print(element);
     }

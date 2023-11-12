@@ -170,12 +170,12 @@ class TextFormFieldDemoState extends State<TextFormFieldDemo> {
   }
 
   void _limparCampos() {
-  setState(() {
-    name.clear();
-    birthDate.clear();
-    gender.clear();
-    phone.clear();
-    email.clear();
+    setState(() {
+      name.clear();
+      birthDate.clear();
+      gender.clear();
+      phone.clear();
+      email.clear();
   });
 }
 }
