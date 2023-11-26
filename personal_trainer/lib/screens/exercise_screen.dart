@@ -10,14 +10,14 @@ import 'package:personal_trainer/data/exercise_model.dart';
 List<String> _list = <String>['abdominal', 'esteira', 'flexao', 'isometria', 'supino_inclinado', 'supino_reto', 'supino_reto_maquina', 'triceps_banco_sentado', 'triceps_banco', 'triceps_martelo_deitado', 'triceps_mergulho', 'triceps_polia'];
 
 
-class AddExerciseScreen extends StatefulWidget {
-  const AddExerciseScreen({super.key});
+class ExerciseScreen extends StatefulWidget {
+  const ExerciseScreen({super.key});
 
   @override
-  State<AddExerciseScreen> createState() => _AddExerciseScreenState();
+  State<ExerciseScreen> createState() => _ExerciseScreenState();
 }
 
-class _AddExerciseScreenState extends State<AddExerciseScreen> {
+class _ExerciseScreenState extends State<ExerciseScreen> {
   
   final TextEditingController name = TextEditingController();
   final TextEditingController description = TextEditingController();

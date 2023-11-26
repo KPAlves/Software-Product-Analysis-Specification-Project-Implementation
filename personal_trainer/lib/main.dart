@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:personal_trainer/data/database_helper.dart';
-import 'package:personal_trainer/screens/add_exercise_screen.dart';
-import 'package:personal_trainer/screens/home_screen.dart';
-
+import 'package:personal_trainer/screens/login_page_screen.dart';
+import 'package:personal_trainer/theme/personalTrainerTheme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,12 +18,10 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp( 
-      title: 'Personal trainer',
+      title: 'Personal Trainer',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blueGrey,
-      ),
-      home: const AddExerciseScreen(),
+      theme: PersonalTrainerTheme().buildPersonalTrainerTheme(),
+      home: const LoginPageScreen(),
     );
   }
 }

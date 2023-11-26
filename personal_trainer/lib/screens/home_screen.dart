@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:personal_trainer/data/user_dao.dart';
 import 'package:personal_trainer/data/user_model.dart';
-import 'package:personal_trainer/screens/add_user_screen.dart';
+import 'package:personal_trainer/screens/user_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -40,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: () {
           Navigator.push(
             context, 
-            MaterialPageRoute(builder: (context) => const AddUserScreen()),
+            MaterialPageRoute(builder: (context) => const UserScreen()),
           ).then((result) {
               // Quando um usuário é adicionado, recarregue a lista de usuários.
               userDao.getUsers().then((users) {

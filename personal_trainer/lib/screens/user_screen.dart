@@ -4,8 +4,8 @@ import 'package:personal_trainer/data/database_helper.dart';
 import 'package:personal_trainer/data/user_dao.dart';
 import 'package:personal_trainer/data/user_model.dart';
 
-class AddUserScreen extends StatelessWidget {
-  const AddUserScreen({super.key});
+class UserScreen extends StatelessWidget {
+  const UserScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
