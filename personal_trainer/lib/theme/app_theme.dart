@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:personal_trainer/theme/colors.dart';
 import 'package:personal_trainer/theme/cut_corners_border.dart';
 
-class PersonalTrainerTheme {
+class AppTheme {
 
-    buildPersonalTrainerTheme() {
+    buildAppTheme() {
     final ThemeData base = ThemeData.light(useMaterial3: true);
     
     return base.copyWith(

@@ -1,65 +1,54 @@
 import 'package:flutter/material.dart';
-import 'package:personal_trainer/screens/exercise_screen.dart';
-import 'package:personal_trainer/screens/home_screen.dart';
 import 'package:personal_trainer/theme/colors.dart';
 
 final _emailController = TextEditingController();
 final _passwordController = TextEditingController();
 
-class LoginPageScreen extends StatefulWidget {
-  const LoginPageScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<LoginPageScreen> createState() => _LoginPageScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginPageScreenState extends State<LoginPageScreen> {
-
+class _LoginScreenState extends State<LoginScreen> {
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          children: const [
-            SizedBox(height: 60.0),
-            _PersonalTrainerLogo(),
-            SizedBox(height: 100.0),
-            _EmailTextField(),
-            SizedBox(height: 12.0),
-            _PasswordTextField(),
-            SizedBox(height: 12.0),            
-            _CancelAndNextButtons(),            
+          children: [
+            const SizedBox(height: 60.0),
+            _personaltrainerlogo(),
+            const SizedBox(height: 100.0),
+            _emailTextField(),
+            const SizedBox(height: 12.0),
+            _passwordTextField(),
+            const SizedBox(height: 12.0),            
+            _cancelAndNextButtons(),            
           ],
         ),
       ),
     );
   }
-}
 
-class _PersonalTrainerLogo extends StatelessWidget {
-  const _PersonalTrainerLogo();
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _personaltrainerlogo() {
+ 
     return Column(
       children: [
         Image.asset('assets/images/logo_min.png'),
         const SizedBox(height: 16),
         Text(
-         'PERSONAL TRAINER',
+          'PERSONAL TRAINER',
           style: Theme.of(context).textTheme.headlineSmall,
         ),
       ],
     );
   }
-}
 
-class _EmailTextField extends StatelessWidget {
-  const _EmailTextField();
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _emailTextField() {
 
     return TextField(
       controller: _emailController,
@@ -69,14 +58,8 @@ class _EmailTextField extends StatelessWidget {
       ),
     );
   }
-}
 
-class _PasswordTextField extends StatelessWidget {
-  const _PasswordTextField();
-
-  @override
-  Widget build(BuildContext context) {
-
+  Widget _passwordTextField() {
 
     return TextField(
       controller: _passwordController,
@@ -87,14 +70,8 @@ class _PasswordTextField extends StatelessWidget {
       ),
     );
   }
-}
 
-class _CancelAndNextButtons extends StatelessWidget {
-  const _CancelAndNextButtons();
-
-  @override
-  Widget build(BuildContext context) {
-
+  Widget _cancelAndNextButtons() {
     return OverflowBar(
       alignment: MainAxisAlignment.end,
       children: [
@@ -121,14 +98,11 @@ class _CancelAndNextButtons extends StatelessWidget {
             ),
           ),
           onPressed: () {
-            Navigator.push(
-              context, 
-              MaterialPageRoute(builder: (context) => const HomeScreen()),
-            );
+            Navigator.pop(context);
           },
           child: const Text('ENTRAR'),
         ),
       ],
     );
-  }
+  } 
 }

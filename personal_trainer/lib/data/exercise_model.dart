@@ -4,8 +4,9 @@ class ExerciseModel {
   String description;
   String image;
 
-  ExerciseModel({
-    this.id,
+  ExerciseModel(
+    {
+    int? id,  
     required this.name,
     required this.description,
     required this.image,

@@ -4,20 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:personal_trainer/data/database_helper.dart';
 import 'package:personal_trainer/data/exercise_dao.dart';
 import 'package:personal_trainer/data/exercise_model.dart';
-
+import 'package:personal_trainer/theme/colors.dart';
 
 
 List<String> _list = <String>['abdominal', 'esteira', 'flexao', 'isometria', 'supino_inclinado', 'supino_reto', 'supino_reto_maquina', 'triceps_banco_sentado', 'triceps_banco', 'triceps_martelo_deitado', 'triceps_mergulho', 'triceps_polia'];
 
-
 class ExerciseScreen extends StatefulWidget {
   const ExerciseScreen({super.key});
-
+  
   @override
   State<ExerciseScreen> createState() => _ExerciseScreenState();
 }
 
 class _ExerciseScreenState extends State<ExerciseScreen> {
+  
   
   final TextEditingController name = TextEditingController();
   final TextEditingController description = TextEditingController();
@@ -30,6 +30,8 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   final exerciseDao = ExerciseDao();
   final exerciseStreamController = StreamController<List<ExerciseModel>>.broadcast();
   
+  
+
   @override
   void initState() {
     super.initState();
@@ -52,18 +54,19 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     return null;
   }
 
-  String dropdownValue = "";
+  String selectedValue = '';
 
-  void openDialogBox() {
+  void _openDialogBox({int? exerciseID}) {
     const sizedBoxSpace = SizedBox(height: 24);
     showDialog(
       context: context, 
       builder: (context) => AlertDialog(
+        backgroundColor: Colors.white,
         content: Form(
           key: _formKey,
           child: Scrollbar(
             child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 5),
               child: Column(
                 children: [
                   sizedBoxSpace,
@@ -72,7 +75,6 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                     textInputAction: TextInputAction.next,
                     textCapitalization: TextCapitalization.words,
                     decoration: const InputDecoration(
-                      filled: true,
                       icon: Icon(Icons.sports_gymnastics),
                       hintText: 'Nome do exercício',
                       labelText: 'Exercício*'
@@ -88,7 +90,6 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                     textInputAction: TextInputAction.next,
                     textCapitalization: TextCapitalization.sentences,
                     decoration: const InputDecoration(
-                      filled: true,
                       icon: Icon(Icons.description),
                       hintText: 'Descrição do exercício',
                       labelText: 'Descrição*'
@@ -99,24 +100,27 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                     validator: _validateField, 
                   ),
                   sizedBoxSpace,
-                  DropdownMenu<String>(
-                    width: 220,
-                    controller: image,
-                    leadingIcon: const Icon(Icons.image),
-                    inputDecorationTheme: const InputDecorationTheme(
-                      filled: true,
+                  DropdownButtonFormField<String>(
+                    isExpanded: true,          
+                    validator: _validateField,            
+                    decoration: const InputDecoration(
+                      hintText: 'Imagem*',
+                      icon: Icon(Icons.image),                     
                     ),
-                    hintText: "Imagem*",
-                    onSelected: (value) {
+                    onChanged: (value) {
                       setState(() {
-                        dropdownValue = value!;
+                        selectedValue = value!;
                         exercise.image = 'assets/images/$value.png';
                       });
                     },
-                    dropdownMenuEntries: _list.map<DropdownMenuEntry<String>>((String value) {
-                      return DropdownMenuEntry<String>(value: value, label: value);
-                    }).toList(), 
-                  ),              
+                    items: _list.map<DropdownMenuItem<String>>(
+                          (String value) => DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          ),
+                        )
+                        .toList(),
+                  ),
                 ],
               ),
             ),
@@ -124,16 +128,34 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
         ) ,
         actions: [
           ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              foregroundColor: brown900,
+              elevation: 8.0,
+              shape: const BeveledRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(7.0)),
+              ),
+            ),                 
             onPressed: () {
-              _limparCampos();          
+              _limparCampos();       
+              _formKey.currentState?.reset();   
               Navigator.pop(context);
            }, 
            child: const Text('Voltar'),
           ),            
           ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              foregroundColor: brown900,
+              elevation: 8.0,
+              shape: const BeveledRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(7.0)),
+              ),
+            ),            
             onPressed: () {
-              _btnSalvar();
+              
+              _btnSalvar(exerciseID);
               _atualizarListaExercicios();
+              _limparCampos();
+              _formKey.currentState?.reset();
             }, 
             child: const Text('Salvar'),
           ),     
@@ -156,22 +178,44 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     }); 
   }
 
-  void _btnSalvar() async {
+  void _btnSalvar(int? exerciseID) async {
     final form = _formKey.currentState!;
     
     if (form.validate()) {
       form.save();
       try {
         final exerciseDao = ExerciseDao();
-        exerciseDao.insertExercise(exercise);
-        //Select na tabela Users exibindo on console
-        DatabaseHelper.instance.selectTabelaExercises();
-        showInSnackBar('Exercício salvo com sucesso');
-        _limparCampos();
+
+        if (exerciseID == null) {
+          exercise.id = null;
+          exerciseDao.insertExercise(exercise);
+          //Select na tabela Exercises exibindo on console
+          DatabaseHelper.instance.selectTabelaExercises();
+          showInSnackBar('Exercício salvo com sucesso');
+        } else {
+          exercise.id = exerciseID;
+          exerciseDao.updateExercise(exercise);
+          //Update na tabela Exercises
+          DatabaseHelper.instance.selectTabelaExercises();
+          showInSnackBar('Exercício atualizado com sucesso');
+        }
+        // _formKey.currentState?.reset();
       } catch (e) {
         showInSnackBar('Erro ao salvar exercício');      
       }
     }
+  }
+
+    void _excluirExercicio({required int exerciseID}) async {
+    
+      final exerciseDao = ExerciseDao();
+
+      exerciseDao.deleteExercise(exerciseID);
+      //Select na tabela Exercises exibindo on console
+      DatabaseHelper.instance.selectTabelaExercises();
+      _atualizarListaExercicios();
+      showInSnackBar('Excluído com sucesso');
+
   }
 
   void showInSnackBar(String value) {
@@ -184,23 +228,11 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Exercícios'),
-            // Text(
-                //   'Subtitulo App Bar',
-                //   style: Theme.of(context)
-                //       .textTheme
-                //       .titleSmall!
-                //       .copyWith(color: Colors.white),
-                // ),
-          ],
-        ),
-      ),
       floatingActionButton: FloatingActionButton(
-        onPressed: openDialogBox,
+        foregroundColor: brown900,
+        backgroundColor: pink100,
+        elevation: 8.0,
+        onPressed: _openDialogBox,
         child: const Icon(Icons.add),
       ),
       body: StreamBuilder<List<ExerciseModel>>(
@@ -210,19 +242,15 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
             final exercises = snapshot.data;
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const SizedBox(height: 8),
-                const Padding(
-                  padding: EdgeInsetsDirectional.only(start: 8.0),
-                  child: Text('Lista de Exercícios'),    
-                ),
-                const SizedBox(height: 4),
                 Expanded(
                   child: ListView.builder(
-                    padding: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(2),
                     itemCount: exercises?.length,
                     itemBuilder: (context, index) {
-                      final exercise = exercises?[index];
+                      final exercise = exercises![index];
+                      int exerciseID = exercise.id!;
                       return Row(
                         children: [
                           SizedBox(
@@ -236,14 +264,30 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(width: 24,),
+                          const SizedBox(width: 10,),
                           Expanded(
                             child: Column(
                               children: [
                                 ListTile(
                                   title: Text(exercise.name),
                                   subtitle: Text(exercise.description),
-                                  trailing: Text('0${index + 1}'),
+                                  // trailing: Text('${index + 1}'),
+                                  trailing: 
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      IconButton(
+                                        onPressed: () => _openDialogBox(exerciseID: exerciseID),
+                                        icon: const Icon(Icons.edit)
+                                      ),
+                                      IconButton(
+                                        onPressed: () => _excluirExercicio(exerciseID: exerciseID),
+                                        icon: const Icon(Icons.delete)
+                                      ),                                      
+                                    ],
+                                  ),
                                 ),
                                 const Divider(thickness: 2),
                               ],
