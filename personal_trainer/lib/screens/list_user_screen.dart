@@ -35,7 +35,6 @@ class _ListUserScreenState extends State<ListUserScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Lista de Usuários')),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
@@ -63,6 +62,21 @@ class _ListUserScreenState extends State<ListUserScreen> {
                 return ListTile(
                   title: Text(user!.name),
                   subtitle: Text(user.email),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      IconButton(
+                        onPressed: () => {},//_openDialogBox(exerciseID: exerciseID),
+                        icon: const Icon(Icons.edit)
+                      ),
+                      IconButton(
+                        onPressed: () => {},//_excluirExercicio(exerciseID: exerciseID),
+                        icon: const Icon(Icons.delete)
+                      ),                                      
+                    ],
+                  ),                  
                 );
               },
             );

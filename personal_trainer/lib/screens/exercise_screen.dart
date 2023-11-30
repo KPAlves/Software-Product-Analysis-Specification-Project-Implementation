@@ -272,8 +272,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                                   title: Text(exercise.name),
                                   subtitle: Text(exercise.description),
                                   // trailing: Text('${index + 1}'),
-                                  trailing: 
-                                  Row(
+                                  trailing: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     mainAxisAlignment: MainAxisAlignment.end,
@@ -301,7 +300,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
               ],
             );           
           } else {
-            return const Text("Nenuhm exercício...");
+            return const Text("  Nenuhm exercício cadastrado...");
           }
         },
       ),

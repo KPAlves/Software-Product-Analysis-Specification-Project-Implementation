@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:personal_trainer/screens/exercise_screen.dart';
+import 'package:personal_trainer/screens/list_user_screen.dart';
 import 'package:personal_trainer/screens/menu_screen.dart';
+import 'package:personal_trainer/screens/user_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   final Category category;
@@ -11,7 +13,14 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     if (category == Category.exercicios) {
       return const ExerciseScreen();
-    } else {
+    } 
+    else if (category == Category.usuarios) {
+      return const ListUserScreen();
+    }
+    else if (category == Category.perfilAcesso) {
+      return const UserScreen();
+    }
+    else {
       return AsymmetricView(products: ProductsRepository.loadProducts(category));
     }    
   }
