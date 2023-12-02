@@ -259,7 +259,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                             child: ClipRRect(
                               borderRadius: const BorderRadius.all(Radius.circular(4)),
                               child: Image.asset(
-                                exercise!.image,
+                                exercise.image,
                                 fit: BoxFit.fill,
                               ),
                             ),

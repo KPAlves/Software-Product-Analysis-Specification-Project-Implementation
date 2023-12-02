@@ -3,7 +3,6 @@ import 'package:personal_trainer/screens/exercise_screen.dart';
 import 'package:personal_trainer/screens/list_user_screen.dart';
 import 'package:personal_trainer/screens/menu_screen.dart';
 import 'package:personal_trainer/screens/perfil_acesso_screen.dart';
-import 'package:personal_trainer/screens/user_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   final Category category;
@@ -115,7 +114,6 @@ class AsymmetricView extends StatelessWidget {
     return List.generate(_listItemCount(products.length), (int index) {
       double width = .59 * MediaQuery.of(context).size.width;
       Widget column;
-      if (true) {
         /// Even cases
         int bottom = _evenCasesIndex(index);
         column = TwoProductCardColumn(
@@ -124,12 +122,7 @@ class AsymmetricView extends StatelessWidget {
                 ? products[bottom + 1]
                 : null);
         width += 32.0;
-      } else {
-        /// Odd cases
-        column = OneProductCardColumn(
-          product: products[_oddCasesIndex(index)],
-        );
-      }
+
       return SizedBox(
         width: width,
         child: Padding(

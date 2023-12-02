@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:personal_trainer/data/database_helper.dart';
 import 'package:personal_trainer/data/perfil_acesso_dao.dart';
-import 'package:sqflite/sqflite.dart';
 
 import 'package:flutter/material.dart';
 import 'package:personal_trainer/data/perfil_acesso_model.dart';
