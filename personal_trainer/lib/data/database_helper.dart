@@ -4,9 +4,11 @@ import 'package:path/path.dart';
 class DatabaseHelper {
   static const String databaseName = 'personal_trainer.db'; // Nome do banco de dados
   static const String usersTable = 'users'; // Nome da tabela de usuários
+  static const String exercisesTable = 'exercises'; // Nome da tabela de exercícios
+  static const String perfilAcessoTable = 'perfilAcesso'; // Nome da tabela de perfis acesso
 
-  DatabaseHelper._privateConstructor();
-  static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
+  DatabaseHelper.privateConstructor();
+  static final DatabaseHelper instance = DatabaseHelper.privateConstructor();
 
   late Database _database;
 
@@ -23,7 +25,7 @@ class DatabaseHelper {
     return _database;
   }
 
-  // Método chamado durante a criação do banco de dados para criar a tabela de usuários.
+  // Método chamado durante a criação do banco de dados para criar a tabela de usuários e tabela de exercícios.
   Future<void> _onCreate(Database db, int version) async {
     await db.execute('''
       CREATE TABLE $usersTable (
@@ -32,9 +34,28 @@ class DatabaseHelper {
         birthDate TEXT,
         gender TEXT,
         phone TEXT,
-        email TEXT
+        email TEXT,
+        password TEXT
       )
     ''');
+
+    await db.execute('''
+      CREATE TABLE $exercisesTable (
+        id INTEGER PRIMARY KEY,
+        name TEXT,
+        description TEXT,
+        image TEXT
+      )
+    ''');   
+    
+    await db.execute('''
+      CREATE TABLE $perfilAcessoTable (
+        id INTEGER PRIMARY KEY,
+        name TEXT,
+        description TEXT,
+        user TEXT
+      )
+    ''');        
   }
 
   // Obtém a instância do banco de dados.
@@ -46,10 +67,29 @@ class DatabaseHelper {
 
   Future<void> selectTabelaUsers() async { 
     
-    final db = await initializeDatabase();
+  final db = await initializeDatabase();
     List<Map> list = await db.rawQuery('SELECT * FROM users');
     for (var element in list) {
       print(element);
     }
   }
+
+  Future<void> selectTabelaExercises() async { 
+    
+    final db = await initializeDatabase();
+    List<Map> list = await db.rawQuery('SELECT * FROM exercises');
+    for (var element in list) {
+      print(element);
+    }
+  }
+
+  Future<void> selectTabelaPerfilAcesso() async { 
+    
+    final db = await initializeDatabase();
+    List<Map> list = await db.rawQuery('SELECT * FROM perfilAcesso');
+    for (var element in list) {
+      print(element);
+    }
+  }
+
 }
