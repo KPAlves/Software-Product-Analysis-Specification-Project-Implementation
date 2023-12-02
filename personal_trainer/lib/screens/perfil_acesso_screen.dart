@@ -98,6 +98,18 @@ class _PerfilAcessoScreenState extends State<PerfilAcessoScreen> {
     }
   }
 
+    void _excluirPerfil({required int perfilAcessoID}) async {
+    
+      final perfilAcessoDao = PerfilAcessoDao();
+
+      perfilAcessoDao.deletePerfilAcesso(perfilAcessoID);
+      //Select na tabela Exercises exibindo on console
+      DatabaseHelper.instance.selectTabelaExercises();
+      _atualizarListaPerfis();
+      showInSnackBar('Excluído com sucesso');
+
+  }  
+
   void showInSnackBar(String value) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -251,7 +263,7 @@ class _PerfilAcessoScreenState extends State<PerfilAcessoScreen> {
                                         icon: const Icon(Icons.edit)
                                       ),
                                       IconButton(
-                                        onPressed: () => {},
+                                        onPressed: () => _excluirPerfil(perfilAcessoID: perfilID),
                                         icon: const Icon(Icons.delete)
                                       ),                                      
                           ],
