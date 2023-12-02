@@ -75,80 +75,11 @@ class _MenuScreenState extends State<MenuScreen> {
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 //TODO: resolver 
 
 enum Category {
-  all,
+  planilha,
   usuarios,
   exercicios,
-  perfilAcesso,
-  
-}
-
-class Product {
-  const Product({
-    required this.category,
-    required this.id,
-    required this.isFeatured,
-    required this.name,
-    required this.price,
-  });
-
-  final Category category;
-  final int id;
-  final bool isFeatured;
-  final String name;
-  final int price;
-
-  @override
-  String toString() => "$name (id=$id)";
-}
-
-
-class ProductsRepository {
-  static List<Product> loadProducts(Category category) {
-    const allProducts = <Product>[
-      Product(
-        category: Category.usuarios,
-        id: 0,
-        isFeatured: true,
-        name: 'Vagabond sack',
-        price: 120,
-      ),
-      Product(
-        category: Category.usuarios,
-        id: 36,
-        isFeatured: false,
-        name: 'Sunshirt dress',
-        price: 58,
-      ),
-      Product(
-        category: Category.exercicios,
-        id: 37,
-        isFeatured: true,
-        name: 'Fine lines tee',
-        price: 58,
-      ),
-    ];
-    if (category == Category.usuarios) {
-      return allProducts;
-    } else {
-      return allProducts.where((Product p) {
-        return p.category == category;
-      }).toList();
-    }
-  }
+  perfis,
 }

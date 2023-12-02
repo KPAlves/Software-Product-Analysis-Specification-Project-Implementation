@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:personal_trainer/data/user_dao.dart';
 import 'package:personal_trainer/data/user_model.dart';
 import 'package:personal_trainer/screens/user_screen.dart';
+import 'package:personal_trainer/theme/colors.dart';
 
 class ListUserScreen extends StatefulWidget {
   const ListUserScreen({super.key});
@@ -36,6 +37,9 @@ class _ListUserScreenState extends State<ListUserScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
+        foregroundColor: brown900,
+        backgroundColor: pink100,
+        elevation: 8.0,        
         onPressed: () {
           Navigator.push(
             context, 

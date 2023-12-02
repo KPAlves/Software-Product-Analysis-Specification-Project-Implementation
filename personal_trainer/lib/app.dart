@@ -16,7 +16,7 @@ class _PersonalTrainerAppState extends State<PersonalTrainerApp> {
   
   //TODO: alterar Category e nome da variável
   
-  Category _currentCategory = Category.usuarios;
+  Category _currentCategory = Category.planilha;
   Widget _frontTitle = Text('Personal Trainer');
 
   @override

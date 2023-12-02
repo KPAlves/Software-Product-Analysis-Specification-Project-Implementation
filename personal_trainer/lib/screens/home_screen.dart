@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:personal_trainer/screens/exercise_screen.dart';
 import 'package:personal_trainer/screens/list_user_screen.dart';
 import 'package:personal_trainer/screens/menu_screen.dart';
+import 'package:personal_trainer/screens/perfil_acesso_screen.dart';
 import 'package:personal_trainer/screens/user_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -17,12 +18,77 @@ class HomeScreen extends StatelessWidget {
     else if (category == Category.usuarios) {
       return const ListUserScreen();
     }
-    else if (category == Category.perfilAcesso) {
-      return const UserScreen();
-    }
-    else {
+    else if (category == Category.perfis) {
+      return const PerfilAcessoScreen();
+    } 
+    else if (category == Category.planilha) {
       return AsymmetricView(products: ProductsRepository.loadProducts(category));
     }    
+    else {
+      return AsymmetricView(products: ProductsRepository.loadProducts(category));
+    }
+  }
+}
+
+class Product {
+  const Product({
+    required this.category,
+    required this.id,
+    required this.name,
+    required this.image,
+    required this.descricao,
+  });
+
+  final Category category;
+  final int id;
+  final String name;
+  final String image;
+  final String descricao;
+
+  @override
+  String toString() => "$name (id=$id)";
+}
+
+
+class ProductsRepository {
+  static List<Product> loadProducts(Category category) {
+    const allProducts = <Product>[
+      Product(
+        category: Category.usuarios,
+        id: 0,
+        name: 'Esteira',
+        descricao: '10 minutos corrida',
+        image: 'assets/images/esteira.png',
+      ),
+      Product(
+        category: Category.usuarios,
+        id: 1,
+        name: 'Flexão',
+        descricao: '4 séries x 15 repetições',
+        image: 'assets/images/flexao.png',
+      ),
+      Product(
+        category: Category.usuarios,
+        id: 2,
+        name: 'Triceps polia',
+        descricao: '4 séries x 10 repetições',
+        image: 'assets/images/triceps_polia.png',
+      ),              
+      Product(
+        category: Category.usuarios,
+        id: 3,
+        name: 'Abdominal',
+        descricao: '4 séries x 20 repetições',
+        image: 'assets/images/abdominal.png',
+      ),      
+    ];
+    if (category == Category.planilha) {
+      return allProducts;
+    } else {
+      return allProducts.where((Product p) {
+        return p.category == category;
+      }).toList();
+    }
   }
 }
 
@@ -49,7 +115,7 @@ class AsymmetricView extends StatelessWidget {
     return List.generate(_listItemCount(products.length), (int index) {
       double width = .59 * MediaQuery.of(context).size.width;
       Widget column;
-      if (index % 2 == 0) {
+      if (true) {
         /// Even cases
         int bottom = _evenCasesIndex(index);
         column = TwoProductCardColumn(
@@ -130,20 +196,23 @@ class TwoProductCardColumn extends StatelessWidget {
       return ListView(
         physics: const ClampingScrollPhysics(),
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsetsDirectional.only(start: 28.0),
-            child: top != null
-                ? ProductCard(
-                    imageAspectRatio: imageAspectRatio,
-                    product: top!,
-                  )
-                : SizedBox(
-                    height: heightOfCards > 0 ? heightOfCards : spacerHeight,
-                  ),
+          const Padding(
+            padding: EdgeInsetsDirectional.only(start: 0.0),
+                child: SizedBox(
+                    height: spacerHeight,
+                  ),            
+            // child: top != null
+                // ? ProductCard(
+                //     imageAspectRatio: imageAspectRatio,
+                //     product: top!,
+                //   )
+                // : SizedBox(
+                //     height: heightOfCards > 0 ? heightOfCards : spacerHeight,
+                //   ),       
           ),
           const SizedBox(height: spacerHeight),
           Padding(
-            padding: const EdgeInsetsDirectional.only(end: 28.0),
+            padding: const EdgeInsetsDirectional.only(end: 0.0),
             child: ProductCard(
               imageAspectRatio: imageAspectRatio,
               product: bottom,
@@ -199,7 +268,7 @@ class ProductCard extends StatelessWidget {
     final ThemeData theme = Theme.of(context);
 
     final imageWidget = Image.asset(
-      'assets/images/abdominal.png',
+      product.image,
       fit: BoxFit.cover,
     );
 
@@ -227,7 +296,7 @@ class ProductCard extends StatelessWidget {
               ),
               const SizedBox(height: 4.0),
               Text(
-                '10',
+                product.descricao,
                 style: theme.textTheme.bodySmall,
               ),
             ],

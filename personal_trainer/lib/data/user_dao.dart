@@ -40,4 +40,9 @@ class UserDao {
       whereArgs: [id],
     );
   }
+
+  Future<List<Map<String, dynamic>>> getListUsers() async {
+    final db = await _databaseHelper.database;
+     return await db!.query('users');
+  }
 }

@@ -35,7 +35,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   @override
   void initState() {
     super.initState();
-    // Inicializa o Stream com a lista de usuários do banco de dados.
+    // Inicializa o Stream com a lista de exercícios do banco de dados.
     exerciseDao.getExercises().then((exercises) {
       exerciseStreamController.sink.add(exercises);
     });

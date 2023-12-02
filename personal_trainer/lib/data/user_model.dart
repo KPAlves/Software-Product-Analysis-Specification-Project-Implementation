@@ -5,6 +5,7 @@ class UserModel {
   String gender;
   String phone;
   String email;
+  String password;
 
   UserModel({
     this.id,
@@ -13,6 +14,7 @@ class UserModel {
     required this.gender,
     required this.phone,
     required this.email,
+    required this.password,
   });
 
   Map<String, dynamic> toMap() {
@@ -23,6 +25,7 @@ class UserModel {
       'gender': gender,
       'phone': phone,
       'email': email,
+      'password': password,
     };
   }
 
@@ -33,5 +36,6 @@ class UserModel {
         birthDate = DateTime.parse(map['birthDate']),
         gender = map['gender'],
         phone = map['phone'],
-        email = map['email'];
+        email = map['email'],
+        password = map['password'];
 }
